@@ -273,9 +273,15 @@ typedef enum {
 
 int touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
     LAContext *context = [[LAContext alloc] init];
-    const BOOL canAuthenticate = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
-    [context release];
-    return canAuthenticate ? AUTH_SUCCESS : AUTH_FAILURE;
+    @try {
+        const BOOL canAuthenticate = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+        [context release];
+        return canAuthenticate ? AUTH_SUCCESS : AUTH_FAILURE;
+    }
+    @catch(NSException *) {
+        // LAPolicyDeviceOwnerAuthenticationWithBiometrics may not be available on builds older than 10.12.1!
+        return AUTH_FAILURE;
+    }
 }
 
 int touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth) {
