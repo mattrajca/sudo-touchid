@@ -271,10 +271,12 @@ typedef enum {
     kTouchIDResultFailed
 } TouchIDResult;
 
+static const LAPolicy kAuthPolicy = LAPolicyDeviceOwnerAuthentication;
+
 int touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
     LAContext *context = [[LAContext alloc] init];
     @try {
-        const BOOL canAuthenticate = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+        const BOOL canAuthenticate = [context canEvaluatePolicy:kAuthPolicy error:nil];
         [context release];
         return canAuthenticate ? AUTH_SUCCESS : AUTH_FAILURE;
     }
@@ -287,7 +289,7 @@ int touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
 int touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth) {
     LAContext *context = [[LAContext alloc] init];
     __block TouchIDResult result = kTouchIDResultNone;
-    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"sudo" reply:^(BOOL success, NSError *error) {
+    [context evaluatePolicy:kAuthPolicy localizedReason:@"sudo" reply:^(BOOL success, NSError *error) {
         result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
         CFRunLoopWakeUp(CFRunLoopGetCurrent());
     }];
