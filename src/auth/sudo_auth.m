@@ -23,6 +23,8 @@
 #include <sys/types.h>
 #include <sys/param.h>
 #include <stdio.h>
+#import <LocalAuthentication/LocalAuthentication.h>
+
 #ifdef STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
@@ -50,7 +52,11 @@
 
 extern char **NewArgv; /* XXX */
 
+int touchid_verify(struct passwd *pw, char *prompt, sudo_auth *auth);
+int touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth);
+
 sudo_auth auth_switch[] = {
+	AUTH_ENTRY(0, "touchid", NULL, touchid_setup, touchid_verify, NULL)
 #ifdef AUTH_STANDALONE
     AUTH_STANDALONE
 #else
@@ -257,6 +263,35 @@ done:
 	    break;
     }
     return rval;
+}
+
+typedef enum {
+    kTouchIDResultNone,
+    kTouchIDResultAllowed,
+    kTouchIDResultFailed
+} TouchIDResult;
+
+int touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
+    LAContext *context = [[LAContext alloc] init];
+    const BOOL canAuthenticate = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+    [context release];
+    return canAuthenticate ? AUTH_SUCCESS : AUTH_FAILURE;
+}
+
+int touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth) {
+    LAContext *context = [[LAContext alloc] init];
+    __block TouchIDResult result = kTouchIDResultNone;
+    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"sudo" reply:^(BOOL success, NSError *error) {
+        result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
+        CFRunLoopWakeUp(CFRunLoopGetCurrent());
+    }];
+
+    while (result == kTouchIDResultNone)
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
+
+    [context release];
+
+    return result == kTouchIDResultAllowed ? AUTH_SUCCESS : AUTH_FAILURE;
 }
 
 void

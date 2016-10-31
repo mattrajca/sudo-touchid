@@ -87,6 +87,7 @@
 		72A31DDA12A57EB20088E971 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72A31DD912A57DFF0088E971 /* libz.dylib */; };
 		72A31DDE12A57F370088E971 /* parse_args.c in Sources */ = {isa = PBXBuildFile; fileRef = 72A31DDD12A57F370088E971 /* parse_args.c */; };
 		72A31DE312A580080088E971 /* get_pty.c in Sources */ = {isa = PBXBuildFile; fileRef = 72A31DE212A580080088E971 /* get_pty.c */; };
+		C935B2AB1DC6E5F900FE1E24 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C935B2AA1DC6E5F900FE1E24 /* LocalAuthentication.framework */; };
 		FE9495C316C7333600AE40BD /* toke_util.c in Sources */ = {isa = PBXBuildFile; fileRef = FE9495C216C732EE00AE40BD /* toke_util.c */; };
 		FE9495C416C7333700AE40BD /* toke_util.c in Sources */ = {isa = PBXBuildFile; fileRef = FE9495C216C732EE00AE40BD /* toke_util.c */; };
 		FE9495C716C733A500AE40BD /* logwrap.c in Sources */ = {isa = PBXBuildFile; fileRef = FE9495C616C733A500AE40BD /* logwrap.c */; };
@@ -117,7 +118,7 @@
 		1C35E8CE0F40B56C006E8642 /* alias.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alias.c; sourceTree = "<group>"; };
 		1C35E8CF0F40B56C006E8642 /* alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alloc.c; sourceTree = "<group>"; };
 		1C35E8D90F40B56C006E8642 /* pam.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pam.c; path = auth/pam.c; sourceTree = "<group>"; };
-		1C35E8E00F40B56C006E8642 /* sudo_auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = sudo_auth.m; path = auth/sudo_auth.m; sourceTree = "<group>"; };
+		1C35E8E00F40B56C006E8642 /* sudo_auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = sudo_auth.m; path = auth/sudo_auth.m; sourceTree = "<group>"; usesTabs = 0; };
 		1C35E8E10F40B56C006E8642 /* sudo_auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sudo_auth.h; path = auth/sudo_auth.h; sourceTree = "<group>"; };
 		1C35E8E20F40B56C006E8642 /* check.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = check.c; sourceTree = "<group>"; };
 		1C35E8E30F40B56C006E8642 /* closefrom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = closefrom.c; sourceTree = "<group>"; };
@@ -186,6 +187,7 @@
 		72A31DD912A57DFF0088E971 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		72A31DDD12A57F370088E971 /* parse_args.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parse_args.c; sourceTree = "<group>"; };
 		72A31DE212A580080088E971 /* get_pty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = get_pty.c; sourceTree = "<group>"; };
+		C935B2AA1DC6E5F900FE1E24 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		FE8160AD1B4DD99800AE44CC /* sudo_lecture */ = {isa = PBXFileReference; lastKnownFileType = text; name = sudo_lecture; path = src/sudo_lecture; sourceTree = "<group>"; };
 		FE9495C216C732EE00AE40BD /* toke_util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = toke_util.c; sourceTree = "<group>"; };
 		FE9495C516C7337700AE40BD /* secure_path.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = secure_path.c; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C935B2AB1DC6E5F900FE1E24 /* LocalAuthentication.framework in Frameworks */,
 				1C84C6710F40C96100E9FD67 /* libpam.dylib in Frameworks */,
 				1C84C6730F40C96D00E9FD67 /* libdl.dylib in Frameworks */,
 				1C6E800F0F40DCC20028C19F /* libbsm.dylib in Frameworks */,
@@ -227,6 +230,7 @@
 				1C6E801E0F40DD5F0028C19F /* Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				1CE32B8E0F422FD500C2C6A0 /* Other Installed Files */,
+				C935B2A91DC6E5F900FE1E24 /* Frameworks */,
 			);
 			name = sudo;
 			sourceTree = "<group>";
@@ -358,6 +362,14 @@
 				1CE32B8D0F422FD100C2C6A0 /* sudo */,
 			);
 			name = "Other Installed Files";
+			sourceTree = "<group>";
+		};
+		C935B2A91DC6E5F900FE1E24 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C935B2AA1DC6E5F900FE1E24 /* LocalAuthentication.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
