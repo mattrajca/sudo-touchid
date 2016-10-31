@@ -1,0 +1,33 @@
+<plist version="1.0">
+<array>
+<dict>
+        <key>OpenSourceProject</key>
+        <string>sudo</string>
+        <key>OpenSourceVersion</key>
+        <string>1.7.10p9</string>
+        <key>OpenSourceWebsiteURL</key>
+        <string>http://www.sudo.ws/</string>
+        <key>OpenSourceURL</key>
+        <string>http://www.sudo.ws/dist/sudo-1.7.10p9.tar.gz</string>
+        <key>OpenSourceSHA1</key>
+        <string>80f98dd20e5b2d3a6e40bcb19764d5a03a8e55fa</string>
+        <key>OpenSourceImportDate</key>
+        <string>2015-07-02</string>
+        <key>OpenSourceModifications</key>
+        <array>
+        	<string>Add BSM auditing support.</string>
+        	<string>Disable sudoedit.</string>
+        	<string>Disable sudoreplay.</string>
+            <string>Disable tty_tickets by default.</string>
+        	<string>Remove login_cap reference from man page.</string>
+        	<string>Allow admin group by default.</string>
+        	<string>Friendlier warning on first usage.</string>
+        	<string>Clean the environment.</string>
+        </array>
+        <key>OpenSourceLicense</key>
+        <string>other|bsd</string>
+        <key>OpenSourceLicenseFile</key>
+        <string>sudo.txt</string>
+</dict>
+</array>
+</plist>
