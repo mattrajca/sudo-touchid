@@ -42,10 +42,12 @@ While not useful in practice, you can use this to verify that the `LocalAuthenti
 
 Replacing the system's `sudo` program is quite risky (can prevent your Mac from booting) and requires disabling System Integrity Protection (aka "Rootless").
 
-Instead of replacing `sudo`, we can install it under a different name to `/usr/local/bin`. I chose to use `suto`, where the `t` stands for Touch ID. 🙃
+Instead of replacing `sudo`, we can install our build under `/usr/local/bin` and give the path precedence over `/usr/bin`, this way our build is found first.
 
-> sudo cp (built-products-directory)/sudo /usr/local/bin/suto
+> sudo cp (built-products-directory)/sudo /usr/local/bin/sudo
 
-> sudo chown root:wheel /usr/local/bin/suto && sudo chmod 4755 /usr/local/bin/suto
+> sudo chown root:wheel /usr/local/bin/sudo && sudo chmod 4755 /usr/local/bin/sudo
 
-Now you should be able to run `suto` in any Terminal (or iTerm) window with Touch ID support!
+You can set up your `PATH` by adding `export PATH=/usr/local/bin:$PATH` to `.bashrc` (thanks @edenzik).
+
+Now you should be able to enter `sudo` in any Terminal (or iTerm) window and authenticate with Touch ID!
