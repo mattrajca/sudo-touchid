@@ -35,7 +35,7 @@
 		1C84C6C80F40CD5300E9FD67 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E8F90F40B56C006E8642 /* error.c */; };
 		1C84C6D30F40CD8000E9FD67 /* env.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E8F80F40B56C006E8642 /* env.c */; };
 		1C84C6D90F40CD9E00E9FD67 /* defaults.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E8F00F40B56C006E8642 /* defaults.c */; };
-		1C84C6F30F40CF9000E9FD67 /* sudo_auth.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E8E00F40B56C006E8642 /* sudo_auth.c */; };
+		1C84C6F30F40CF9000E9FD67 /* sudo_auth.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E8E00F40B56C006E8642 /* sudo_auth.m */; };
 		1C84C6F60F40CFF600E9FD67 /* logging.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E9170F40B56C006E8642 /* logging.c */; };
 		1C84C70B0F40D61100E9FD67 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E9150F40B56C006E8642 /* list.c */; };
 		1C84C70E0F40D63700E9FD67 /* lbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C35E9110F40B56C006E8642 /* lbuf.c */; };
@@ -117,7 +117,7 @@
 		1C35E8CE0F40B56C006E8642 /* alias.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alias.c; sourceTree = "<group>"; };
 		1C35E8CF0F40B56C006E8642 /* alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alloc.c; sourceTree = "<group>"; };
 		1C35E8D90F40B56C006E8642 /* pam.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pam.c; path = auth/pam.c; sourceTree = "<group>"; };
-		1C35E8E00F40B56C006E8642 /* sudo_auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sudo_auth.c; path = auth/sudo_auth.c; sourceTree = "<group>"; };
+		1C35E8E00F40B56C006E8642 /* sudo_auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = sudo_auth.m; path = auth/sudo_auth.m; sourceTree = "<group>"; };
 		1C35E8E10F40B56C006E8642 /* sudo_auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sudo_auth.h; path = auth/sudo_auth.h; sourceTree = "<group>"; };
 		1C35E8E20F40B56C006E8642 /* check.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = check.c; sourceTree = "<group>"; };
 		1C35E8E30F40B56C006E8642 /* closefrom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = closefrom.c; sourceTree = "<group>"; };
@@ -344,7 +344,7 @@
 		1C84C6EA0F40CF5B00E9FD67 /* auth */ = {
 			isa = PBXGroup;
 			children = (
-				1C35E8E00F40B56C006E8642 /* sudo_auth.c */,
+				1C35E8E00F40B56C006E8642 /* sudo_auth.m */,
 				1C35E8E10F40B56C006E8642 /* sudo_auth.h */,
 			);
 			name = auth;
@@ -578,7 +578,7 @@
 				1C84C70B0F40D61100E9FD67 /* list.c in Sources */,
 				1C84C6F60F40CFF600E9FD67 /* logging.c in Sources */,
 				FE9495C316C7333600AE40BD /* toke_util.c in Sources */,
-				1C84C6F30F40CF9000E9FD67 /* sudo_auth.c in Sources */,
+				1C84C6F30F40CF9000E9FD67 /* sudo_auth.m in Sources */,
 				1C84C6D90F40CD9E00E9FD67 /* defaults.c in Sources */,
 				1C84C6D30F40CD8000E9FD67 /* env.c in Sources */,
 				1C84C6C80F40CD5300E9FD67 /* error.c in Sources */,
