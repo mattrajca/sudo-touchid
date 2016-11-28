@@ -3,7 +3,7 @@
 
 ## Screenshot
 
-![Screenshot](images/Screenshot.png)
+<img src="https://github.com/mattrajca/sudo-touchid/blob/master/images/Screenshot.png?raw=true" width=556 height=284 />		
 
 ## Warning
 
