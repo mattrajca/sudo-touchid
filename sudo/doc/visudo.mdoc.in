@@ -1,0 +1,401 @@
+.\"
+.\" Copyright (c) 1996,1998-2005, 2007-2015
+.\"	Todd C. Miller <Todd.Miller@courtesan.com>
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\" ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
+.\" Sponsored in part by the Defense Advanced Research Projects
+.\" Agency (DARPA) and Air Force Research Laboratory, Air Force
+.\" Materiel Command, USAF, under agreement number F39502-99-1-0512.
+.\"
+.Dd November 20, 2015
+.Dt VISUDO @mansectsu@
+.Os Sudo @PACKAGE_VERSION@
+.Sh NAME
+.Nm visudo
+.Nd edit the sudoers file
+.Sh SYNOPSIS
+.Nm visudo
+.Op Fl chqsV
+.Op Fl f Ar sudoers
+.Op Fl x Ar output_file
+.Sh DESCRIPTION
+.Nm
+edits the
+.Em sudoers
+file in a safe fashion, analogous to
+.Xr vipw @mansectsu@ .
+.Nm
+locks the
+.Em sudoers
+file against multiple simultaneous edits, provides basic sanity checks,
+and checks for parse errors.
+If the
+.Em sudoers
+file is currently being edited you will receive a message to try again later.
+.Pp
+There is a hard-coded list of one or more editors that
+.Nm
+will use set at compile-time that may be overridden via the
+.Em editor
+.Em sudoers
+.Li Default
+variable.
+This list defaults to
+.Li "@editor@" .
+Normally,
+.Nm
+does not honor the
+.Ev VISUAL
+or
+.Ev EDITOR
+environment variables unless they contain an editor in the aforementioned
+editors list.
+However, if
+.Nm
+is configured with the
+.Li --with-env-editor
+option or the
+.Em env_editor
+.Li Default
+variable is set in
+.Em sudoers ,
+.Nm
+will use any the editor defines by
+.Ev VISUAL
+or
+.Ev EDITOR .
+Note that this can be a security hole since it allows the user to
+execute any program they wish simply by setting
+.Ev VISUAL
+or
+.Ev EDITOR .
+.Pp
+.Nm
+parses the
+.Em sudoers
+file after the edit and will
+not save the changes if there is a syntax error.
+Upon finding an error,
+.Nm
+will print a message stating the line number(s)
+where the error occurred and the user will receive the
+.Dq What now?
+prompt.
+At this point the user may enter
+.Ql e
+to re-edit the
+.Em sudoers
+file,
+.Ql x
+to exit without saving the changes, or
+.Ql Q
+to quit and save changes.
+The
+.Ql Q
+option should be used with extreme care because if
+.Nm
+believes there to be a parse error, so will
+.Nm sudo
+and no one
+will be able to run
+.Nm sudo
+again until the error is fixed.
+If
+.Ql e
+is typed to edit the
+.Em sudoers
+file after a parse error has been detected, the cursor will be placed on
+the line where the error occurred (if the editor supports this feature).
+.Pp
+The options are as follows:
+.Bl -tag -width Fl
+.It Fl c , -check
+Enable
+.Em check-only
+mode.
+The existing
+.Em sudoers
+file will be
+checked for syntax errors, owner and mode.
+A message will be printed to the standard output describing the status of
+.Em sudoers
+unless the
+.Fl q
+option was specified.
+If the check completes successfully,
+.Nm
+will exit with a value of 0.
+If an error is encountered,
+.Nm
+will exit with a value of 1.
+.It Fl f Ar sudoers , Fl -file Ns = Ns Ar sudoers
+Specify an alternate
+.Em sudoers
+file location.
+With this option,
+.Nm
+will edit (or check) the
+.Em sudoers
+file of your choice,
+instead of the default,
+.Pa @sysconfdir@/sudoers .
+The lock file used is the specified
+.Em sudoers
+file with
+.Dq \.tmp
+appended to it.
+In
+.Em check-only
+mode only, the argument to
+.Fl f
+may be
+.Ql - ,
+indicating that
+.Em sudoers
+will be read from the standard input.
+.It Fl h , -help
+Display a short help message to the standard output and exit.
+.It Fl q , -quiet
+Enable
+.Em quiet
+mode.
+In this mode details about syntax errors are not printed.
+This option is only useful when combined with
+the
+.Fl c
+option.
+.It Fl s , -strict
+Enable
+.Em strict
+checking of the
+.Em sudoers
+file.
+If an alias is used before it is defined,
+.Nm
+will consider this a parse error.
+Note that it is not possible to differentiate between an
+alias and a host name or user name that consists solely of uppercase
+letters, digits, and the underscore
+.Pq Ql _
+character.
+.It Fl V , -version
+Print the
+.Nm
+and
+.Em sudoers
+grammar versions and exit.
+.It Fl x Ar output_file , Fl -export Ns = Ns Ar output_file
+Export a
+.Em sudoers
+in JSON format and write it to
+.Ar output_file .
+If
+.Ar output_file
+is
+.Ql - ,
+the exported
+.Em sudoers
+policy will be written to the standard output.
+By default,
+.Pa @sysconfdir@/sudoers
+(and any files it includes) will be exported.
+The
+.Fl f
+option can be used to specify a different
+.Em sudoers
+file to export.
+The exported format is intended to be easier for third-party
+applications to parse than the traditional
+.Em sudoers
+format.
+The various values have explicit types which removes much of the
+ambiguity of the
+.Em sudoers
+format.
+.El
+.Ss Debugging and sudoers plugin arguments
+.Nm
+versions 1.8.4 and higher support a flexible debugging framework
+that is configured via
+.Li Debug
+lines in the
+.Xr sudo.conf @mansectform@
+file.
+.Pp
+Starting with
+.Nm sudo
+1.8.12,
+.Nm
+will also parse the arguments to the
+.Em sudoers
+plugin to override the default
+.Em sudoers
+path name, UID, GID and file mode.
+These arguments, if present, should be listed after the path to the plugin
+(i.e.\& after
+.Pa sudoers.so ) .
+Multiple arguments may be specified, separated by white space.
+For example:
+.Bd -literal -offset indent
+Plugin sudoers_policy sudoers.so sudoers_mode=0400
+.Ed
+.Pp
+The following arguments are supported:
+.Bl -tag -width 8n
+.It sudoers_file=pathname
+The
+.Em sudoers_file
+argument can be used to override the default path to the
+.Em sudoers
+file.
+.It sudoers_uid=uid
+The
+.Em sudoers_uid
+argument can be used to override the default owner of the sudoers file.
+It should be specified as a numeric user ID.
+.It sudoers_gid=gid
+The
+.Em sudoers_gid
+argument can be used to override the default group of the sudoers file.
+It must be specified as a numeric group ID (not a group name).
+.It sudoers_mode=mode
+The
+.Em sudoers_mode
+argument can be used to override the default file mode for the sudoers file.
+It should be specified as an octal value.
+.El
+.Pp
+For more information on configuring
+.Xr sudo.conf @mansectform@ ,
+please refer to its manual.
+.Sh ENVIRONMENT
+The following environment variables may be consulted depending on
+the value of the
+.Em editor
+and
+.Em env_editor
+.Em sudoers
+settings:
+.Bl -tag -width 15n
+.It Ev VISUAL
+Invoked by
+.Nm
+as the editor to use
+.It Ev EDITOR
+Used by
+.Nm
+if
+.Ev VISUAL
+is not set
+.El
+.Sh FILES
+.Bl -tag -width 24n
+.It Pa @sysconfdir@/sudo.conf
+Sudo front end configuration
+.It Pa @sysconfdir@/sudoers
+List of who can run what
+.It Pa @sysconfdir@/sudoers.tmp
+Lock file for visudo
+.El
+.Sh DIAGNOSTICS
+.Bl -tag -width 4n
+.It Li sudoers file busy, try again later.
+Someone else is currently editing the
+.Em sudoers
+file.
+.It Li @sysconfdir@/sudoers.tmp: Permission denied
+You didn't run
+.Nm
+as root.
+.It Li Can't find you in the passwd database
+Your user ID does not appear in the system passwd file.
+.It Li Warning: {User,Runas,Host,Cmnd}_Alias referenced but not defined
+Either you are trying to use an undeclared {User,Runas,Host,Cmnd}_Alias
+or you have a user or host name listed that consists solely of
+uppercase letters, digits, and the underscore
+.Pq Ql _
+character.
+In the latter case, you can ignore the warnings
+.Po
+.Nm sudo
+will not complain
+.Pc .
+In
+.Fl s
+(strict) mode these are errors, not warnings.
+.It Li Warning: unused {User,Runas,Host,Cmnd}_Alias
+The specified {User,Runas,Host,Cmnd}_Alias was defined but never
+used.
+You may wish to comment out or remove the unused alias.
+.It Li Warning: cycle in {User,Runas,Host,Cmnd}_Alias
+The specified {User,Runas,Host,Cmnd}_Alias includes a reference to
+itself, either directly or through an alias it includes.
+This is only a warning by default as
+.Nm sudo
+will ignore cycles when parsing
+the
+.Em sudoers
+file.
+.It Li visudo: @sysconfdir@/sudoers: input and output files must be different
+The
+.Fl x
+flag was used and the specified
+.Ar output_file
+has the same path name as the
+.Em sudoers
+file to export.
+.El
+.Sh SEE ALSO
+.Xr vi 1 ,
+.Xr sudo.conf @mansectform@ ,
+.Xr sudoers @mansectform@ ,
+.Xr sudo @mansectsu@ ,
+.Xr vipw @mansectsu@
+.Sh AUTHORS
+Many people have worked on
+.Nm sudo
+over the years; this version consists of code written primarily by:
+.Bd -ragged -offset indent
+.An Todd C. Miller
+.Ed
+.Pp
+See the CONTRIBUTORS file in the
+.Nm sudo
+distribution (https://www.sudo.ws/contributors.html) for an
+exhaustive list of people who have contributed to
+.Nm sudo .
+.Sh CAVEATS
+There is no easy way to prevent a user from gaining a root shell if
+the editor used by
+.Nm
+allows shell escapes.
+.Sh BUGS
+If you feel you have found a bug in
+.Nm ,
+please submit a bug report at https://bugzilla.sudo.ws/
+.Sh SUPPORT
+Limited free support is available via the sudo-users mailing list,
+see https://www.sudo.ws/mailman/listinfo/sudo-users to subscribe or
+search the archives.
+.Sh DISCLAIMER
+.Nm
+is provided
+.Dq AS IS
+and any express or implied warranties, including, but not limited
+to, the implied warranties of merchantability and fitness for a
+particular purpose are disclaimed.
+See the LICENSE file distributed with
+.Nm sudo
+or https://www.sudo.ws/license.html for complete details.

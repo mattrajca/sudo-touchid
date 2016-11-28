@@ -1,0 +1,60 @@
+#
+# Sample /etc/sudoers file.
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# See the sudoers man page for the details on how to write a sudoers file.
+
+##
+# Override built-in defaults
+##
+Defaults	env_reset
+Defaults	env_keep += "BLOCKSIZE"
+Defaults	env_keep += "COLORFGBG COLORTERM"
+Defaults	env_keep += "__CF_USER_TEXT_ENCODING"
+Defaults	env_keep += "CHARSET LANG LANGUAGE LC_ALL LC_COLLATE LC_CTYPE"
+Defaults	env_keep += "LC_MESSAGES LC_MONETARY LC_NUMERIC LC_TIME"
+Defaults	env_keep += "LINES COLUMNS"
+Defaults	env_keep += "LSCOLORS"
+Defaults	env_keep += "SSH_AUTH_SOCK"
+Defaults	env_keep += "TZ"
+Defaults	env_keep += "DISPLAY XAUTHORIZATION XAUTHORITY"
+Defaults	env_keep += "EDITOR VISUAL"
+Defaults	env_keep += "HOME MAIL"
+
+Defaults	lecture_file = "/etc/sudo_lecture"
+
+##
+# User alias specification
+##
+# User_Alias	FULLTIMERS = millert, mikef, dowdy
+
+##
+# Runas alias specification
+##
+# Runas_Alias	OP = root, operator
+
+##
+# Host alias specification
+##
+# Host_Alias	CUNETS = 128.138.0.0/255.255.0.0
+# Host_Alias	CSNETS = 128.138.243.0, 128.138.204.0/24, 128.138.242.0
+# Host_Alias	SERVERS = master, mail, www, ns
+# Host_Alias	CDROM = orion, perseus, hercules
+
+##
+# Cmnd alias specification
+##
+# Cmnd_Alias	PAGERS = /usr/bin/more, /usr/bin/pg, /usr/bin/less
+
+##
+# User specification
+##
+
+# root and users in group wheel can run anything on any machine as any user
+root		ALL = (ALL) ALL
+%admin		ALL = (ALL) ALL
+
+## Read drop-in files from /private/etc/sudoers.d
+## (the '#' here does not indicate a comment)
+#includedir /private/etc/sudoers.d
