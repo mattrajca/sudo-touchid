@@ -32,6 +32,12 @@ Now if we try running our copy of `sudo`, it should work:
 
 > ./sudo -s
 
+If you don't have a Mac with a biometric sensor, `sudo-touchid` will fail. If you'd still like to test whether the `LocalAuthentication` framework is working correctly, you can change the `kAuthPolicy` constant to `LAPolicyDeviceOwnerAuthentication` in `sudo/plugins/sudoers/auth/sudo_auth.m`. This will present a dialog box asking the user for his or her password:		
+
+<img src="https://github.com/mattrajca/sudo-touchid/blob/master/images/auto_fallback.png?raw=true" width=556 height=301 />		
+
+While not useful in practice, you can use this to verify that the `LocalAuthentication` code does in fact work.
+
 ## Installing
 
 Replacing the system's `sudo` program is quite risky (can prevent your Mac from booting) and requires disabling System Integrity Protection (aka "Rootless").
