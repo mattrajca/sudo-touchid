@@ -7,7 +7,8 @@
 
 ## Warning
 
-Only tested under the MacBook Pro with Touch Bar, macOS 10.12.1.
+- I am not a security expert. While I am using this as a fun experiment on my personal computer, your security needs may vary.
+- Only tested under the MacBook Pro with Touch Bar, macOS 10.12.1.
 
 ## Building
 
