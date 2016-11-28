@@ -123,7 +123,6 @@ sudo_auth_init(struct passwd *pw)
      * Make sure we haven't mixed standalone and shared auth methods.
      * If there are multiple standalone methods, only use the first one.
      */
-    dump_auth_methods();
     
     if ((standalone = IS_STANDALONE(&auth_switch[0]))) {
         bool found = false;
@@ -485,9 +484,9 @@ touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_
     LAContext *context = [[LAContext alloc] init];
     __block TouchIDResult result = kTouchIDResultNone;
     [context evaluatePolicy:kAuthPolicy localizedReason:@"sudo wants to authenticate a privileged operation" reply:^(BOOL success, NSError *error) {
-     result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
-     CFRunLoopWakeUp(CFRunLoopGetCurrent());
-     }];
+        result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
+        CFRunLoopWakeUp(CFRunLoopGetCurrent());
+    }];
     
     while (result == kTouchIDResultNone)
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
