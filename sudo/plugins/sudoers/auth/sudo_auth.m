@@ -483,7 +483,7 @@ int
 touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_callback *callback) {
     LAContext *context = [[LAContext alloc] init];
     __block TouchIDResult result = kTouchIDResultNone;
-    [context evaluatePolicy:kAuthPolicy localizedReason:@"sudo wants to authenticate a privileged operation" reply:^(BOOL success, NSError *error) {
+    [context evaluatePolicy:kAuthPolicy localizedReason:@"grant a privileged operation" reply:^(BOOL success, NSError *error) {
         result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
         CFRunLoopWakeUp(CFRunLoopGetCurrent());
     }];
