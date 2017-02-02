@@ -38,7 +38,17 @@ If you don't have a Mac with a biometric sensor, `sudo-touchid` will fail. If yo
 
 While not useful in practice, you can use this to verify that the `LocalAuthentication` code does in fact work.
 
-## Installing
+## Installing using Homebrew
+
+`Xcode` is not required (As long as *HOMEBREW_PREFIX* is default).
+
+> brew tap paulche/sudo-touchid
+
+> brew install sudo-touchid
+
+Follow caveat message to change owner/mode.
+
+## Installing from source code
 
 Replacing the system's `sudo` program is quite risky (can prevent your Mac from booting) and requires disabling System Integrity Protection (aka "Rootless").
 
