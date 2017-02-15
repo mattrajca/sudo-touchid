@@ -458,10 +458,13 @@ dump_auth_methods(void)
 typedef enum {
     kTouchIDResultNone,
     kTouchIDResultAllowed,
+    kTouchIDResultFallback,
+    kTouchIDResultCancel,
     kTouchIDResultFailed
 } TouchIDResult;
 
 static const LAPolicy kAuthPolicy = 0x3f0;
+static const LAPolicy kAuthPolicyFallback = LAPolicyDeviceOwnerAuthentication;
 
 int
 touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
@@ -469,28 +472,49 @@ touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
         LAContext *context = [[LAContext alloc] init];
         BOOL canAuthenticate = [context canEvaluatePolicy:kAuthPolicy error:nil];
         [context release];
-        return canAuthenticate ? AUTH_SUCCESS : AUTH_FAILURE;
+        return canAuthenticate ? AUTH_SUCCESS : AUTH_FATAL;
     }
     @catch(NSException *) {
         // LAPolicyDeviceOwnerAuthenticationWithBiometrics may not be available on builds older than 10.12.1!
         sudo_printf(SUDO_CONV_INFO_MSG, _("2"));
-        return AUTH_FAILURE;
+        return AUTH_FATAL;
     }
     
 }
 
 int
 touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_callback *callback) {
-    LAContext *context = [[LAContext alloc] init];
     __block TouchIDResult result = kTouchIDResultNone;
-    [context evaluatePolicy:kAuthPolicy localizedReason:@"authenticate a privileged operation" reply:^(BOOL success, NSError *error) {
-        result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
-        CFRunLoopWakeUp(CFRunLoopGetCurrent());
-    }];
+    while (result == kTouchIDResultFallback || result == kTouchIDResultNone) {
+        LAContext *context = [[LAContext alloc] init];
+        [context evaluatePolicy:(result != kTouchIDResultFallback ? kAuthPolicy : kAuthPolicyFallback) localizedReason:@"authenticate a privileged operation" reply:^(BOOL success, NSError *error) {
+            result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
+            switch (error.code) {
+                case LAErrorUserFallback:
+                    result = kTouchIDResultFallback;
+                    break;
+                case LAErrorUserCancel:
+                    result = kTouchIDResultCancel;
+                    break;
+            }
+            CFRunLoopWakeUp(CFRunLoopGetCurrent());
+        }];
+        
+        result = kTouchIDResultNone;
+
+        while (result == kTouchIDResultNone) {
+            CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
+        }
+        
+        [context release];
+    }
     
-    while (result == kTouchIDResultNone)
-        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
-    
-    [context release];
-    return result == kTouchIDResultAllowed ? AUTH_SUCCESS : AUTH_FAILURE;
+    switch (result) {
+        case kTouchIDResultCancel:
+            return AUTH_FATAL;
+        case kTouchIDResultAllowed:
+            return AUTH_SUCCESS;
+        default:
+            return AUTH_FAILURE;
+    }
 }
