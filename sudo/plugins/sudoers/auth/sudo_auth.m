@@ -470,7 +470,9 @@ int
 touchid_setup(struct passwd *pw, char **prompt, sudo_auth *auth) {
     @try {
         LAContext *context = [[LAContext alloc] init];
-        BOOL canAuthenticate = [context canEvaluatePolicy:kAuthPolicy error:nil];
+        BOOL canAuthenticate =
+            [context canEvaluatePolicy:kAuthPolicy error:nil] ||
+            [context canEvaluatePolicy:kAuthPolicyFallback error:nil];
         [context release];
         return canAuthenticate ? AUTH_SUCCESS : AUTH_FATAL;
     }
@@ -490,6 +492,7 @@ touchid_verify(struct passwd *pw, char *pass, sudo_auth *auth, struct sudo_conv_
         [context evaluatePolicy:(result != kTouchIDResultFallback ? kAuthPolicy : kAuthPolicyFallback) localizedReason:@"authenticate a privileged operation" reply:^(BOOL success, NSError *error) {
             result = success ? kTouchIDResultAllowed : kTouchIDResultFailed;
             switch (error.code) {
+                case LAErrorTouchIDNotAvailable:
                 case LAErrorUserFallback:
                     result = kTouchIDResultFallback;
                     break;
