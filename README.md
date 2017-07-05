@@ -22,15 +22,17 @@ If we try running our newly-built `sudo` executable now, we'll get an error:
 
 To fix this, we can use our system's `sudo` command and the `chown/chmod` commands to give our newly-built `sudo` the permissions it needs:
 
-> cd (built-products-directory)
-
-> sudo chown root:wheel sudo && sudo chmod 4755 sudo
+```sh
+cd (built-products-directory)
+sudo chown root:wheel sudo && sudo chmod 4755 sudo
+```
 
 Now if we try running our copy of `sudo`, it should work:
 
-> cd (built-products-directory)
-
-> ./sudo -s
+```sh
+cd (built-products-directory)
+./sudo -s
+```
 
 If you don't have a Mac with a biometric sensor, `sudo-touchid` will fail. If you'd still like to test whether the `LocalAuthentication` framework is working correctly, you can change the `kAuthPolicy` constant to `LAPolicyDeviceOwnerAuthentication` in `sudo/plugins/sudoers/auth/sudo_auth.m`. This will present a dialog box asking the user for his or her password:		
 
@@ -44,9 +46,10 @@ Replacing the system's `sudo` program is quite risky (can prevent your Mac from 
 
 Instead of replacing `sudo`, we can install our build under `/usr/local/bin` and give the path precedence over `/usr/bin`, this way our build is found first.
 
-> sudo cp (built-products-directory)/sudo /usr/local/bin/sudo
-
-> sudo chown root:wheel /usr/local/bin/sudo && sudo chmod 4755 /usr/local/bin/sudo
+```sh
+sudo cp (built-products-directory)/sudo /usr/local/bin/sudo
+sudo chown root:wheel /usr/local/bin/sudo && sudo chmod 4755 /usr/local/bin/sudo
+```
 
 You can set up your `PATH` by adding `export PATH=/usr/local/bin:$PATH` to `.bashrc` (thanks @edenzik).
 
