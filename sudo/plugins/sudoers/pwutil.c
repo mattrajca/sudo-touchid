@@ -800,6 +800,8 @@ sudo_set_grlist(struct passwd *pw, char * const *groups, char * const *gids)
     debug_return_int(0);
 }
 
+#ifndef __APPLE_MEMBERSHIP__
+
 bool
 user_in_group(const struct passwd *pw, const char *group)
 {
@@ -860,3 +862,22 @@ done:
 	__func__, pw->pw_name, matched ? "" : "NOT ", group);
     debug_return_bool(matched);
 }
+
+#else
+
+#include <membership.h>
+
+int mbr_check_membership_ext(int, const void *, size_t, int, const void *, int, int *);
+
+bool
+user_in_group(const struct passwd *pw, const char *group)
+{
+	debug_decl(user_in_group, SUDOERS_DEBUG_NSS)
+	int is_member = 0;
+	int ret = mbr_check_membership_ext(ID_TYPE_UID, &pw->pw_uid, sizeof(pw->pw_uid), ID_TYPE_GROUPNAME, group, 0, &is_member);
+	sudo_debug_printf(SUDO_DEBUG_DEBUG, "%s: user %s %sin group %s (mbr_check: %d)", __func__, pw->pw_name, is_member ? "" : "NOT ", group, ret);
+
+	debug_return_bool((bool)is_member);
+}
+
+#endif
